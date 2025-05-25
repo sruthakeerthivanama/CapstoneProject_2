@@ -1,0 +1,52 @@
+package stepDefinitions;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import base.BaseTest;
+import io.cucumber.java.en.*;
+import org.testng.Assert;
+
+import java.util.Set;
+
+public class WebTestingSteps {
+    WebDriver driver = BaseTest.driver;
+    
+    @Given("User launches {string}")
+    public void userLaunches(String url) {
+        driver.get(url);
+        Assert.assertEquals(driver.getTitle(), "WebDriverUniversity.com");
+    }
+    
+    @When("User clicks on the IFRAME link")
+    public void userClicksIframe() {
+        driver.findElement(By.xpath("//a[contains(text(),'IFRAME')]")).click();
+    }
+
+    @Then("User switches to the new tab")
+    public void switchToNewTab() {
+        Set<String> windowHandles = driver.getWindowHandles();
+        for (String handle : windowHandles) {
+            driver.switchTo().window(handle);
+        }
+        Assert.assertTrue(driver.getTitle().contains("IFRAME"));
+    }
+    
+    @Then("User verifies the presence of an image")
+    public void verifyImagePresence() {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//img"))).isDisplayed());
+    }
+
+    @When("User clicks the right arrow button")
+    public void clickRightArrow() {
+        driver.findElement(By.xpath("//button[contains(@class,'right-arrow')]")).click();
+    }
+
+    @Then("User verifies the images are changing accordingly")
+    public void verifyImageChange() {
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        Assert.assertTrue(wait.until(ExpectedConditions.attributeContains(By.xpath("//img"), "src", "new-image.png")));
+    }
+}
