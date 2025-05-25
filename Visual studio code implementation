@@ -1,0 +1,97 @@
+visual studio:
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
+Launch the Web Application and Verify Page Title
+
+public class WebAppTest {
+    public static void main(String[] args) {
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+
+        WebDriver driver = new ChromeDriver();
+        driver.get("http://webdriveruniversity.com/index.html");
+
+        String expectedTitle = "WebDriverUniversity.com";
+        String actualTitle = driver.getTitle();
+
+        if(actualTitle.equals(expectedTitle)) {
+            System.out.println("Title Verified Successfully!");
+        } else {
+            System.out.println("Title Verification Failed!");
+        }
+
+        driver.quit();
+    }
+}
+
+Click on Dropdown-Checkboxes-RadioButtons Link
+
+
+import org.openqa.selenium.By;
+
+driver.findElement(By.xpath("//a[@href='Dropdown-Checkboxes-RadioButtons/index.html']")).click();
+
+Verify New Tab Opens & Switch Using Selenium
+
+import java.util.Set;
+
+String originalWindow = driver.getWindowHandle();
+Set<String> allWindows = driver.getWindowHandles();
+
+for (String window : allWindows) {
+    if (!window.equals(originalWindow)) {
+        driver.switchTo().window(window);
+        break;
+    }
+}
+
+Select Value from Dropdown & Verify Selection:
+
+import org.openqa.selenium.support.ui.Select;
+
+Select dropdown = new Select(driver.findElement(By.id("dropdowm-menu-1")));
+dropdown.selectByVisibleText("Python");
+
+String selectedOption = dropdown.getFirstSelectedOption().getText();
+System.out.println("Selected: " + selectedOption);
+
+
+Select Multiple Checkboxes & Verify Counts:
+import java.util.List;
+import org.openqa.selenium.WebElement;
+
+List<WebElement> checkboxes = driver.findElements(By.cssSelector("input[type='checkbox']"));
+int checkedCount = 0, uncheckedCount = 0;
+
+for (WebElement checkbox : checkboxes) {
+    if (!checkbox.isSelected()) {
+        checkbox.click(); // Select all
+    }
+    if (checkbox.isSelected()) {
+        checkedCount++;
+    } else {
+        uncheckedCount++;
+    }
+}
+System.out.println("Checked Count: " + checkedCount);
+System.out.println("Unchecked Count: " + uncheckedCount);
+
+
+Select Radio button and verify counts:
+List<WebElement> radioButtons = driver.findElements(By.cssSelector("input[type='radio']"));
+int checkedRadioCount = 0, uncheckedRadioCount = 0;
+
+for (WebElement radio : radioButtons) {
+    if (!radio.isSelected()) {
+        radio.click();
+    }
+    if (radio.isSelected()) {
+        checkedRadioCount++;
+    } else {
+        uncheckedRadioCount++;
+    }
+}
+
+System.out.println("Checked Radio Buttons: " + checkedRadioCount);
+System.out.println("Unchecked Radio Buttons: " + uncheckedRadioCount);
