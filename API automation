@@ -1,0 +1,50 @@
+API Automation
+
+Read data from excel:
+ublic static String getCellData(String filePath, String sheetName, int row, int col) throws IOException {
+    FileInputStream fis = new FileInputStream(filePath);
+    Workbook workbook = new XSSFWorkbook(fis);
+    Sheet sheet = workbook.getSheet(sheetName);
+    Row rowData = sheet.getRow(row);
+    Cell cell = rowData.getCell(col);
+    String cellValue = cell.getStringCellValue();
+    workbook.close();
+    return cellValue;
+}
+
+Rest Assured API call:
+@Test
+public void testRegisterUser() {
+    String email = getCellData("data.xlsx", "Sheet1", 1, 0); // Fetch email
+    String password = getCellData("data.xlsx", "Sheet1", 1, 1); // Fetch password
+
+    Response response = given()
+        .contentType("application/json")
+        .body("{\"email\": \"" + email + "\", \"password\": \"" + password + "\"}")
+    .when()
+        .post("https://reqres.in/api/register")
+    .then()
+        .statusCode(200)
+        .body("id", Matchers.instanceOf(Integer.class))
+        .body("token", Matchers.instanceOf(String.class))
+        .extract().response();
+
+    System.out.println(response.asString());
+}
+
+Assertions for negavtive cases
+
+Test
+public void testInvalidCredentials() {
+    Response response = given()
+        .contentType("application/json")
+        .body("{\"email\": \"invalid@example.com\", \"password\": \"wrongpass\"}")
+    .when()
+        .post("https://reqres.in/api/register")
+    .then()
+        .statusCode(400)
+        .body("error", Matchers.containsString("Missing password")) // Example assertion
+        .extract().response();
+
+    System.out.println(response.asString());
+}
