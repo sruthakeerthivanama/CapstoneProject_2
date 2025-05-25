@@ -9,7 +9,26 @@ import io.cucumber.java.en.*;
 import org.testng.Assert;
 
 import java.util.Set;
+Page objects:
 
+package pages;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+
+public class HomePage {
+    WebDriver driver;
+    
+    By iframeLink = By.xpath("//a[contains(text(),'IFRAME')]");
+
+    public HomePage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void clickIframeLink() {
+        driver.findElement(iframeLink).click();
+    }
+}
 public class WebTestingSteps {
     WebDriver driver = BaseTest.driver;
     
