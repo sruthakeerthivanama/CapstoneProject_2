@@ -1,0 +1,43 @@
+import pytest
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+@pytest.fixture(scope="class")
+def setup(request):
+    driver = webdriver.Chrome()
+    driver.maximize_window()
+    request.cls.driver = driver
+    yield
+    driver.quit()
+
+
+@pytest.mark.usefixtures("setup")
+class TestWebAutomation:
+    
+    def test_launch_url(self):
+        self.driver.get("http://webdriveruniversity.com/index.html")
+        assert "WebDriverUniversity.com" in self.driver.title
+    
+    def test_click_iframe(self):
+        iframe_link = self.driver.find_element(By.XPATH, "//a[contains(text(),'IFRAME')]")
+        iframe_link.click()
+    
+    def test_switch_to_new_tab(self):
+        windows = self.driver.window_handles
+        self.driver.switch_to.window(windows[1])
+        assert "IFRAME" in self.driver.title
+    
+    def test_verify_image_presence(self):
+        wait = WebDriverWait(self.driver, 10)
+        image = wait.until(EC.presence_of_element_located((By.XPATH, "//img")))
+        assert image.is_displayed()
+    
+    def test_click_right_arrow(self):
+        arrow_button = self.driver.find_element(By.XPATH, "//button[contains(@class,'right-arrow')]")
+        arrow_button.click()
+    
+      def test_verify_image_change(self):
+        wait = WebDriverWait(self.driver, 10)
+        updated_image = wait.until(EC.attribute_contains((By.XPATH, "//img"), "src", "new-image.png"))
+        assert updated_image is not None
