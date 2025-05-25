@@ -1,0 +1,7 @@
+<suite name="Suite">
+    <test name="WebDriver Test">
+        <classes>
+            <class name="stepDefinitions.WebTestingSteps"/>
+        </classes>
+    </test>
+</suite>
